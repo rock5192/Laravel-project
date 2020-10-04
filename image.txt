@@ -1,0 +1,41 @@
+ public function store(Request $request)
+    {
+        $employee = new Employee();
+
+        $employee->name = $request->name;
+
+
+        if($request->hasfile('image'))
+        {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalName();
+            $filename = time() . '.' .$extension;
+            $file->move('uploads/employee/',$filename);
+            $employee->image = $filename;
+        }
+
+        else
+        {
+            return $request;
+            $employee->image = '';
+        }
+
+        $employee->save();
+        return redirect()->back();
+    }
+
+
+
+
+
+ @foreach($employees as $employee)
+    <tr>
+      <th scope="row">{{$employee->id}}</th>
+      <th>{{$employee->name}}</th>
+      <th>
+            <img src="{{asset('uploads/employee/'. $employee->image)}}" alt="saujanya's image" height="100px" width="100px">
+      </th>
+  
+    </tr>
+
+    @endforeach
